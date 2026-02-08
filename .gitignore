@@ -1,0 +1,14 @@
+Library/
+Temp/
+Logs/
+Obj/
+UserSettings/
+MemoryCaptures/
+Builds/
+.vscode/
+.idea/
+.vs/
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
