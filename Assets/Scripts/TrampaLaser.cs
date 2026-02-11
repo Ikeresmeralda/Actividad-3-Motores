@@ -8,6 +8,7 @@ public class TrampaLaser : MonoBehaviour
 
     private Collider col;
     private Renderer rend;
+    private bool canDamage = true;
 
     void Start()
     {
@@ -20,12 +21,11 @@ public class TrampaLaser : MonoBehaviour
     {
         while (true)
         {
-            // Encendido
             col.enabled = true;
             rend.enabled = true;
+            canDamage = true;
             yield return new WaitForSeconds(onTime);
 
-            // Apagado
             col.enabled = false;
             rend.enabled = false;
             yield return new WaitForSeconds(offTime);
@@ -34,9 +34,15 @@ public class TrampaLaser : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (canDamage && other.CompareTag("Player"))
         {
-            other.GetComponent<RespawnJugador>().Respawn();
+            SaludJugador playerHealth = other.GetComponent<SaludJugador>();
+
+            if (playerHealth != null)
+            {
+                playerHealth.TakeDamage(50f);
+                canDamage = false; // evita doble daño
+            }
         }
     }
 }
