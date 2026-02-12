@@ -2,12 +2,11 @@
 
 public class DoorTriggerDetector : MonoBehaviour
 {
-    [SerializeField] GameObject eText;
-    [SerializeField] GameObject mirilla; // Arrastra aquí la imagen de la mirilla del Canvas
+    [SerializeField] private GameObject eText;
+    [SerializeField] private GameObject mirilla;
+    [SerializeField] private Cilindro roller;
 
-    public Cilindro roller;
-
-    void Update()
+    private void Update()
     {
         RaycastHit hit;
 
@@ -15,31 +14,42 @@ public class DoorTriggerDetector : MonoBehaviour
         {
             if (hit.collider.CompareTag("DoorTrigger"))
             {
-                // Solo mostramos el texto si la mirilla NO está activa (puerta cerrada)
-                if (!mirilla.activeSelf) eText.SetActive(true);
+                // Mostrar texto solo si la mirilla no está activa
+                if (mirilla != null && !mirilla.activeSelf)
+                {
+                    if (eText != null)
+                        eText.SetActive(true);
+                }
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    Puerta door = hit.collider.GetComponent<Puerta>();
+                    Puerta door = hit.collider.GetComponentInParent<Puerta>();
 
                     if (door != null)
                     {
                         door.OpenDoor();
 
-                        // ACTIVAMOS la mirilla y QUITAMOS el texto de la E
-                        if (mirilla != null) mirilla.SetActive(true);
-                        eText.SetActive(false);
+                        if (mirilla != null)
+                            mirilla.SetActive(true);
+
+                        if (eText != null)
+                            eText.SetActive(false);
 
                         if (roller != null)
-                        {
                             roller.StartRolling();
-                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("No se encontró el script Puerta en el objeto.");
                     }
                 }
+
                 return;
             }
         }
 
-        eText.SetActive(false);
+        // Si no estamos mirando la puerta
+        if (eText != null)
+            eText.SetActive(false);
     }
 }
