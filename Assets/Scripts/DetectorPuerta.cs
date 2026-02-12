@@ -3,8 +3,9 @@
 public class DoorTriggerDetector : MonoBehaviour
 {
     [SerializeField] GameObject eText;
+    [SerializeField] GameObject mirilla; // Arrastra aquí la imagen de la mirilla del Canvas
 
-    public Cilindro roller;  
+    public Cilindro roller;
 
     void Update()
     {
@@ -14,7 +15,8 @@ public class DoorTriggerDetector : MonoBehaviour
         {
             if (hit.collider.CompareTag("DoorTrigger"))
             {
-                eText.SetActive(true);
+                // Solo mostramos el texto si la mirilla NO está activa (puerta cerrada)
+                if (!mirilla.activeSelf) eText.SetActive(true);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
@@ -24,13 +26,16 @@ public class DoorTriggerDetector : MonoBehaviour
                     {
                         door.OpenDoor();
 
+                        // ACTIVAMOS la mirilla y QUITAMOS el texto de la E
+                        if (mirilla != null) mirilla.SetActive(true);
+                        eText.SetActive(false);
+
                         if (roller != null)
                         {
                             roller.StartRolling();
                         }
                     }
                 }
-
                 return;
             }
         }
