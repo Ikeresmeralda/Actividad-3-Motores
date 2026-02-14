@@ -1,12 +1,18 @@
 using UnityEngine;
 
-
 public class Puerta : MonoBehaviour
 {
-    public Cilindro roller;  
+    public Cilindro roller;
+
     public void OpenDoor()
     {
-        gameObject.SetActive(false); 
+        if (SistemaXP.instancia != null)
+        {
+            SistemaXP.instancia.AñadirXP(5);
+            Debug.Log("+5 XP (puerta)");
+        }
+
+        gameObject.SetActive(false);
 
         if (roller != null)
         {

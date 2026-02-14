@@ -52,4 +52,14 @@ public class DoorTriggerDetector : MonoBehaviour
         if (eText != null)
             eText.SetActive(false);
     }
+
+    // 🔥 RESET AL RESPWAN
+    public void ResetDoorUI()
+    {
+        if (eText != null)
+            eText.SetActive(false);
+
+        if (mirilla != null)
+            mirilla.SetActive(false);
+    }
 }

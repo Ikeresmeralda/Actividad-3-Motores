@@ -40,8 +40,8 @@ public class TrampaLaser : MonoBehaviour
 
             if (playerHealth != null)
             {
-                playerHealth.TakeDamage(50f);
-                canDamage = false; // evita doble daño
+                playerHealth.TakeDamage(25f);
+                canDamage = false; 
             }
         }
     }

@@ -1,4 +1,4 @@
-using UnityEngine;
+ï»¿using UnityEngine;
 using UnityEngine.AI;
 
 public class IA : MonoBehaviour
@@ -6,7 +6,6 @@ public class IA : MonoBehaviour
     public NavMeshAgent agente;
     public Transform jugador;
     public Transform[] puntosPatrulla;
-    public Transform puntoInicio; // <--- Arrastra aquí el SpawnPoint
     public float distanciaVision = 8f;
 
     private int indicePatrulla = 0;
@@ -28,14 +27,16 @@ public class IA : MonoBehaviour
         {
             if (!detectado)
             {
-                Debug.Log("¡TE HE DETECTADO!");
+                Debug.Log("Â¡TE HE DETECTADO!");
                 detectado = true;
             }
+
             agente.SetDestination(jugador.position);
         }
         else
         {
             detectado = false;
+
             if (!agente.pathPending && agente.remainingDistance < 0.8f)
             {
                 IrAlSiguientePunto();
@@ -46,37 +47,30 @@ public class IA : MonoBehaviour
     void IrAlSiguientePunto()
     {
         if (puntosPatrulla.Length == 0) return;
+
         agente.destination = puntosPatrulla[indicePatrulla].position;
         indicePatrulla = (indicePatrulla + 1) % puntosPatrulla.Length;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Esto imprimirá en consola el nombre de CUALQUIER COSA que toque el enemigo
         Debug.Log("El enemigo ha tocado a: " + other.gameObject.name);
 
         if (other.CompareTag("Player"))
         {
-            Debug.Log("¡JUGADOR DETECTADO! Teletransportando...");
+            Debug.Log("Â¡JUGADOR ELIMINADO!");
 
-            if (puntoInicio != null)
+            // Buscar el script de vida del jugador
+            SaludJugador salud = other.GetComponent<SaludJugador>();
+
+            if (salud != null)
             {
-                // Forzamos la posición
-                CharacterController cc = other.GetComponent<CharacterController>();
-                if (cc != null)
-                {
-                    cc.enabled = false; // Desactivar para que no bloquee el movimiento
-                    other.transform.position = puntoInicio.position;
-                    cc.enabled = true; // Reactivar
-                }
-                else
-                {
-                    other.transform.position = puntoInicio.position;
-                }
+                // MATAR al jugador â†’ esto activarÃ¡ tu panel y botÃ³n
+                salud.TakeDamage(999f);
             }
             else
             {
-                Debug.LogError("ERROR: No has arrastrado el punto de inicio al script de la IA");
+                Debug.LogError("El jugador no tiene el script SaludJugador");
             }
         }
     }

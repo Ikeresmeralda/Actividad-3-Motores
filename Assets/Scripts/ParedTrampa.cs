@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 
 public class ParedTrampa : MonoBehaviour
 {
@@ -32,8 +32,17 @@ public class ParedTrampa : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            other.gameObject.GetComponent<RespawnJugador>().Respawn();
+            SaludJugador salud = other.gameObject.GetComponent<SaludJugador>();
+
+            if (salud != null)
+            {
+                
+                salud.TakeDamage(999f);
+            }
+            else
+            {
+                Debug.LogError("El jugador no tiene SaludJugador");
+            }
         }
     }
 }
-
